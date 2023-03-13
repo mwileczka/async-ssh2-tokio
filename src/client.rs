@@ -1,6 +1,6 @@
 use async_trait::async_trait;
-use russh::Channel;
 use russh::client::{Config, Handle, Handler, Msg};
+use russh::Channel;
 use russh_keys::key::KeyPair;
 use std::io::{self, Write};
 use std::net::{SocketAddr, ToSocketAddrs};
@@ -58,9 +58,8 @@ impl ServerCheckMethod {
     }
 }
 
-
-pub struct ChannelHelper{
-    ch: Channel<Msg>,
+pub struct ChannelHelper {
+    pub ch: Channel<Msg>,
 }
 
 impl ChannelHelper {
@@ -113,7 +112,7 @@ impl ChannelHelper {
 ///     Ok(())
 /// }
 pub struct Client {
-    connection_handle: Handle<ClientHandler>,
+    pub connection_handle: Handle<ClientHandler>,
     username: String,
     address: SocketAddr,
 }
@@ -253,13 +252,13 @@ impl Client {
     pub async fn execute(&mut self, command: &str) -> Result<CommandExecutedResult, crate::Error> {
         return match self.open_channel().await {
             Ok(mut helper) => helper.execute(command).await,
-            Err(e) => Err(e)            
+            Err(e) => Err(e),
         };
     }
 
     pub async fn open_channel(&mut self) -> Result<ChannelHelper, crate::Error> {
         match self.connection_handle.channel_open_session().await {
-            Ok(ch)    => Ok(ChannelHelper{ch}),
+            Ok(ch) => Ok(ChannelHelper { ch }),
             Err(e) => Err(crate::Error::SshError(e)),
         }
     }
@@ -295,7 +294,7 @@ pub struct CommandExecutedResult {
 }
 
 #[derive(Clone)]
-struct ClientHandler {
+pub struct ClientHandler {
     host: SocketAddr,
     server_check: ServerCheckMethod,
 }

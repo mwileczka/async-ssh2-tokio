@@ -43,5 +43,8 @@
 pub mod client;
 pub mod error;
 
-pub use client::{AuthMethod, Client, ServerCheckMethod, ChannelHelper};
+pub use client::{AuthMethod, ChannelHelper, Client, ServerCheckMethod};
 pub use error::Error;
+
+pub extern crate russh;
+pub extern crate russh_keys;
